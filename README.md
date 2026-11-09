@@ -156,6 +156,7 @@ titanic.csv     Pandas groupby      표 2개       titanic_model.pkl  임베딩 
 - **A** 사실표만 검색
 - **B** 사실표와 생존 예측 모델 설명 검색
 - **C** 사실표, 모델 설명, 분석 해석 기준 검색
+- 사실표는 `data/titanic_facts.csv`에 저장하며, F01 성별·F02 객실 등급·F03 연령대 비교 근거를 담는다.
 - 자료에 없는 질문에는 확인할 수 없다고 답한다.
 - 검색과 답변 생성에는 OpenAI API 키가 필요하다. API 키는 저장소에 올리지 말고 Streamlit Secrets에 설정한다.
 
@@ -215,6 +216,8 @@ titanic_app/
 ├─ utils/
 │  └─ titanic_rag.py      사실표 생성·임베딩 검색·근거 기반 답변
 ├─ requirements.txt
+├─ data/
+│  └─ titanic_facts.csv  과제용 사실표·RAG 근거
 ├─ titanic.csv
 └─ titanic_model.pkl
 ```
