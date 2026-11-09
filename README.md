@@ -179,13 +179,19 @@ python -m streamlit run app.py
 
 **3.** 브라우저 왼쪽 메뉴에서 **분석 Q&A** 선택
 
-**로컬에서 RAG 사용하기:** 프로젝트 안에 `.streamlit/secrets.toml` 파일을 만들고 아래처럼 키를 설정한다.
+**로컬에서 RAG 사용하기:** 프로젝트 안에 `.streamlit/secrets.toml` 파일을 만들고 아래처럼 입력한다. 따옴표 안의 예시 문구를 실제 발급받은 API 키로 바꿔야 한다.
 
 ```toml
-OPENAI_API_KEY = "발급받은-키"
+OPENAI_API_KEY = "실제_API_키"
 ```
 
-Streamlit Community Cloud에서는 앱의 **Settings → Secrets**에 같은 항목을 추가한다. 키를 코드나 GitHub에 올리지 않는다.
+**Streamlit Community Cloud에서 설정하기:** 배포 앱의 **Settings → Secrets**를 열고 아래 한 줄을 붙여 넣는다. `실제_API_키`는 실제 키로 바꾸고 저장한다. 저장 후 앱이 다시 시작되면 Q&A를 사용할 수 있다.
+
+```toml
+OPENAI_API_KEY = "실제_API_키"
+```
+
+API 키는 채팅, 코드, README, GitHub 저장소에 올리지 않는다.
 
 > ⚙️ 모델을 불러올 때 버전 오류가 나면, 모델을 만든 환경과 **같은 scikit-learn 버전**을 설치한다.
 
