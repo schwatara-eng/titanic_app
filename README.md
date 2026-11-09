@@ -4,6 +4,8 @@
 
 # 🚢 타이타닉 생존 대시보드
 
+🔗 [배포된 Titanic 앱 바로가기](https://titanicappgit-qs5vwulectwcnzrjupzgp4.streamlit.app/)
+
 ### 누가 살아남았나 — 승객 891명의 기록으로 보기
 
 `Python` · `Pandas` · `scikit-learn` · `Streamlit` · `RAG`
