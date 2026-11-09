@@ -3,17 +3,16 @@ from __future__ import annotations
 import json
 import os
 
-import pandas as pd
 import streamlit as st
 from openai import OpenAI
 
 from utils.titanic_rag import (
     EMBEDDING_MODEL,
     answer_question,
-    build_fact_documents,
     cache_key_for_documents,
     cosine_similarity,
     documents_for_channel,
+    load_fact_documents,
 )
 
 
@@ -34,9 +33,8 @@ selected_channel = st.radio(
 )
 
 app_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-csv_path = os.path.join(app_folder, "titanic.csv")
-titanic = pd.read_csv(csv_path)
-facts = build_fact_documents(titanic)
+facts_path = os.path.join(app_folder, "data", "titanic_facts.csv")
+facts = load_fact_documents(facts_path)
 documents = documents_for_channel(facts, selected_channel)
 
 try:
