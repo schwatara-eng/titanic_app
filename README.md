@@ -6,7 +6,7 @@
 
 ### 누가 살아남았나 — 승객 891명의 기록으로 보기
 
-`Python` · `Pandas` · `scikit-learn` · `Streamlit`
+`Python` · `Pandas` · `scikit-learn` · `Streamlit` · `RAG`
 
 </div>
 
@@ -24,8 +24,8 @@
 이 숫자를 여러 기준으로 쪼개 보고, 마지막엔 모델로 예측까지 해 본다.
 
 ```
-데이터 읽기 → 기준별 생존율 집계 → 순위 비교 → 모델 예측
-titanic.csv     Pandas groupby      표 2개       titanic_model.pkl
+데이터 읽기 → 기준별 생존율 집계 → 순위 비교 → 모델 예측 → 근거 기반 Q&A
+titanic.csv     Pandas groupby      표 2개       titanic_model.pkl  임베딩 검색 + 답변 생성
 ```
 
 <br>
@@ -143,12 +143,32 @@ titanic.csv     Pandas groupby      표 2개       titanic_model.pkl
 
 <sub>SLIDE 08 / 09</sub>
 
+## 💬 분석 Q&A — RAG
+
+왼쪽 메뉴에서 **분석 Q&A**를 열어 타이타닉 데이터에 질문할 수 있다.
+
+1. 질문을 임베딩으로 바꾼다.
+2. 사실표에서 질문과 의미가 가까운 근거를 찾는다.
+3. 찾은 근거 안에서 답변을 만들고, 근거 ID를 함께 보여 준다.
+
+- **A** 사실표만 검색
+- **B** 사실표와 생존 예측 모델 설명 검색
+- **C** 사실표, 모델 설명, 분석 해석 기준 검색
+- 자료에 없는 질문에는 확인할 수 없다고 답한다.
+- 검색과 답변 생성에는 OpenAI API 키가 필요하다. API 키는 저장소에 올리지 말고 Streamlit Secrets에 설정한다.
+
+<br>
+
+---
+
+<sub>SLIDE 09 / 09</sub>
+
 ## ▶️ 실행하기
 
 **1. 패키지 설치**
 
 ```bash
-python -m pip install streamlit pandas joblib scikit-learn
+python -m pip install -r requirements.txt
 ```
 
 **2. 앱 실행**
@@ -157,7 +177,15 @@ python -m pip install streamlit pandas joblib scikit-learn
 python -m streamlit run app.py
 ```
 
-**3.** 터미널에 뜬 **Local URL**을 브라우저에서 열기
+**3.** 브라우저 왼쪽 메뉴에서 **분석 Q&A** 선택
+
+**로컬에서 RAG 사용하기:** 프로젝트 안에 `.streamlit/secrets.toml` 파일을 만들고 아래처럼 키를 설정한다.
+
+```toml
+OPENAI_API_KEY = "발급받은-키"
+```
+
+Streamlit Community Cloud에서는 앱의 **Settings → Secrets**에 같은 항목을 추가한다. 키를 코드나 GitHub에 올리지 않는다.
 
 > ⚙️ 모델을 불러올 때 버전 오류가 나면, 모델을 만든 환경과 **같은 scikit-learn 버전**을 설치한다.
 
@@ -167,17 +195,20 @@ python -m streamlit run app.py
 
 <div align="center">
 
-<sub>SLIDE 09 / 09</sub>
-
-## 📁 파일 구조
+### 📁 파일 구조
 
 </div>
 
 ```
 titanic_app/
-├─ app.py              Streamlit 대시보드
-├─ titanic.csv         승객 891명 기록
-└─ titanic_model.pkl   생존 예측 모델
+├─ app.py                 생존 대시보드
+├─ pages/
+│  └─ 2_분석_QA.py        RAG 질문답변 화면
+├─ utils/
+│  └─ titanic_rag.py      사실표 생성·임베딩 검색·근거 기반 답변
+├─ requirements.txt
+├─ titanic.csv
+└─ titanic_model.pkl
 ```
 
 <div align="center">
