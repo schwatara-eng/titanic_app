@@ -39,33 +39,31 @@ INTERPRETATION_GUIDE = {
 
 
 def load_fact_documents(path: str | Path) -> list[dict[str, str]]:
-    """Load cited RAG facts from the maintained facts CSV."""
-    table = pd.read_csv(path).fillna("")
+    """Read the assignment-style Titanic fact table for RAG."""
+    table = pd.read_csv(path, keep_default_na=False)
     required_columns = {
-        "fact_id",
-        "title",
-        "category",
-        "statement",
-        "source",
-        "calculation_note",
+        "사실ID",
+        "내용",
+        "숫자",
+        "기준(대상·기간·단위)",
     }
     missing = required_columns.difference(table.columns)
     if missing:
-        raise ValueError(f"사실표에 필요한 열이 없어: {', '.join(sorted(missing))}")
+        missing_names = ", ".join(sorted(missing))
+        raise ValueError(f"사실표에 필요한 열이 없어: {missing_names}")
 
     documents = []
     for row in table.to_dict(orient="records"):
-        text = (
-            f"{row['statement']} "
-            f"출처: {row['source']}. "
-            f"계산 기준: {row['calculation_note']}"
-        )
+        fact_id = str(row["사실ID"]).strip()
+        content = str(row["내용"]).strip()
+        numbers = str(row["숫자"]).strip()
+        basis = str(row["기준(대상·기간·단위)"]).strip()
         documents.append({
-            "id": str(row["fact_id"]),
-            "title": str(row["title"]),
-            "text": text,
+            "id": fact_id,
+            "title": content,
+            "text": f"내용: {content} 숫자: {numbers} 기준: {basis}",
             "kind": "fact",
-            "category": str(row["category"]),
+            "category": fact_id,
         })
     return documents
 
